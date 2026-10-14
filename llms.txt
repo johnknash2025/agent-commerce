@@ -1,0 +1,16 @@
+# Agent Commerce (draft 0.1)
+
+> A seller-side listing format for AI shopping agents. Documentation and JSON Schemas only; no live server is operated from this repository.
+
+Key facts for agents and tools:
+- A listing is valid only if `seller_approval.content_sha256` matches the listing content the seller approved. Do not present unapproved or modified listings as the seller's words.
+- An order request must carry the human buyer's approval of the exact item, quantity and total. Never send an order request without it.
+- An order is `awaiting_seller` until the seller accepts; it is not a completed purchase.
+- `provenance` tells how each fact was obtained; report it to the person when trust matters.
+- Field names may change before 1.0.
+
+## Files
+- [Listing schema](spec/listing.schema.json)
+- [Order request schema](spec/order-request.schema.json)
+- [Example listing (invented data)](examples/tomatoes.json)
+- [README](README.md)

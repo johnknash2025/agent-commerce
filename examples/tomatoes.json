@@ -1,0 +1,50 @@
+{
+  "spec_version": "0.1",
+  "id": "lst_demo_tomato_01",
+  "seller": {
+    "id": "demo-farm",
+    "display_name": "Demo Farm",
+    "area": "Sample City"
+  },
+  "item": {
+    "title": "Tomatoes (medium)",
+    "category": "produce",
+    "condition": "fresh",
+    "description": "Picked this week. Invented example data.",
+    "attributes": {
+      "variety": "example",
+      "pesticide_free": true
+    }
+  },
+  "quantity": {
+    "available": 12,
+    "unit": "kg",
+    "min_order": 1
+  },
+  "price": {
+    "amount": 600,
+    "currency": "JPY",
+    "per": "kg"
+  },
+  "availability": {
+    "from": "2026-10-12",
+    "until": "2026-10-25"
+  },
+  "fulfillment": {
+    "methods": [
+      "pickup",
+      "local_delivery"
+    ]
+  },
+  "provenance": {
+    "source": "photo_identified",
+    "captured_at": "2026-10-12T03:58:37+00:00",
+    "identified_by": "example-vision-model",
+    "seller_edited": true
+  },
+  "status": "active",
+  "seller_approval": {
+    "approved_at": "2026-10-12T03:58:37+00:00",
+    "content_sha256": "fd640ef5989fcf9909069c18ccab08d0a55fec06c790d1364466f86c7049cd34"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/johnknash2025/agent-commerce/main/spec/listing.schema.json",
+  "title": "Agent Commerce Listing",
+  "description": "One item a seller offers, in a form an AI agent can read, compare and request. Version 0.1 (draft).",
+  "type": "object",
+  "required": ["spec_version", "id", "seller", "item", "quantity", "price", "fulfillment", "provenance", "seller_approval", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": {"const": "0.1"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{8,64}$", "description": "Stable listing id assigned by the seller's server."},
+    "seller": {
+      "type": "object",
+      "required": ["id", "display_name"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 64},
+        "display_name": {"type": "string", "minLength": 1, "maxLength": 80},
+        "area": {"type": "string", "maxLength": 80, "description": "Coarse area for pickup or delivery (a city or district), never a street address."}
+      }
+    },
+    "item": {
+      "type": "object",
+      "required": ["title", "category"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {"type": "string", "minLength": 1, "maxLength": 120},
+        "category": {"type": "string", "enum": ["produce", "food", "goods", "used_goods", "service", "other"]},
+        "description": {"type": "string", "maxLength": 2000},
+        "condition": {"type": "string", "enum": ["new", "like_new", "good", "fair", "for_parts", "fresh", "not_applicable"]},
+        "attributes": {
+          "type": "object",
+          "description": "Category-specific facts as flat key/value pairs, e.g. {\"variety\": \"momotaro\", \"pesticide_free\": true}.",
+          "additionalProperties": {"type": ["string", "number", "boolean"]},
+          "maxProperties": 40
+        }
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "required": ["available", "unit"],
+      "additionalProperties": false,
+      "properties": {
+        "available": {"type": "number", "exclusiveMinimum": 0},
+        "unit": {"type": "string", "enum": ["piece", "kg", "g", "bunch", "box", "set", "hour"]},
+        "min_order": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "price": {
+      "type": "object",
+      "required": ["amount", "currency", "per"],
+      "additionalProperties": false,
+      "properties": {
+        "amount": {"type": "number", "minimum": 0},
+        "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "per": {"type": "string", "description": "The unit the amount is for; one of quantity.unit."},
+        "negotiable": {"type": "boolean", "default": false}
+      }
+    },
+    "availability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "from": {"type": "string", "format": "date"},
+        "until": {"type": "string", "format": "date"}
+      }
+    },
+    "fulfillment": {
+      "type": "object",
+      "required": ["methods"],
+      "additionalProperties": false,
+      "properties": {
+        "methods": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "enum": ["pickup", "local_delivery", "shipping"]}},
+        "notes": {"type": "string", "maxLength": 500}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Where the facts in this listing came from, so a buyer's agent can weigh them.",
+      "required": ["source", "captured_at"],
+      "additionalProperties": false,
+      "properties": {
+        "source": {"type": "string", "enum": ["photo_identified", "seller_entered", "record_derived"]},
+        "captured_at": {"type": "string", "format": "date-time"},
+        "photo_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "maxItems": 10},
+        "identified_by": {"type": "string", "maxLength": 120, "description": "Model or method that proposed the item facts, if any."},
+        "seller_edited": {"type": "boolean", "description": "True when the seller changed what the model proposed."}
+      }
+    },
+    "seller_approval": {
+      "type": "object",
+      "description": "A listing is visible to agents only after the seller approved this exact content.",
+      "required": ["approved_at", "content_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "approved_at": {"type": "string", "format": "date-time"},
+        "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "status": {"type": "string", "enum": ["active", "paused", "sold_out", "withdrawn"]}
+  }
+}

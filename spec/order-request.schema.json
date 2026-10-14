@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/johnknash2025/agent-commerce/main/spec/order-request.schema.json",
+  "title": "Agent Commerce Order Request",
+  "description": "A request from a buyer's agent. It is never a completed purchase: the buyer must have approved it, and the seller must accept it. Version 0.1 (draft).",
+  "type": "object",
+  "required": ["spec_version", "listing_id", "quantity", "fulfillment", "buyer_agent", "buyer_approval"],
+  "additionalProperties": false,
+  "properties": {
+    "spec_version": {"const": "0.1"},
+    "listing_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{8,64}$"},
+    "quantity": {"type": "number", "exclusiveMinimum": 0},
+    "fulfillment": {"type": "string", "enum": ["pickup", "local_delivery", "shipping"]},
+    "buyer_agent": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 80, "description": "The agent product making the request."},
+        "contact": {"type": "string", "maxLength": 200, "description": "How the seller can reach the buyer (relayed by the server, not published)."}
+      }
+    },
+    "buyer_approval": {
+      "type": "object",
+      "description": "Evidence that the human buyer approved this exact request (item, quantity, price and fulfillment) before it was sent.",
+      "required": ["approved_at", "statement"],
+      "additionalProperties": false,
+      "properties": {
+        "approved_at": {"type": "string", "format": "date-time"},
+        "statement": {"type": "string", "minLength": 1, "maxLength": 300, "description": "What the buyer was shown and agreed to, in plain words."},
+        "max_total": {"type": "number", "minimum": 0, "description": "The most the buyer agreed to pay, in the listing's currency."}
+      }
+    },
+    "note": {"type": "string", "maxLength": 500}
+  }
+}
