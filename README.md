@@ -1,5 +1,7 @@
 # Agent Commerce: a seller-side listing format for AI shopping agents
 
+English | [日本語](README.ja.md)
+
 > Documentation and specification draft. The reference server and the seller app are proprietary and their source is not published here. *Agent Commerce is a working title.* **Draft 0.1: field names may still change.**
 
 **A common, machine-readable listing format that lets a small seller (a farm, a shop, a person) be found and asked by people's AI agents, without running a storefront, and with two promises built in: the seller approves exactly what is listed, and nothing is bought unless both people agree.**
